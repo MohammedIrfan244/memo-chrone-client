@@ -1,9 +1,9 @@
 import axios from "axios"
 import { ILoginForm } from "./type";
 
-export const loginUser = async ( { email, password, username }: ILoginForm): Promise<void> => {
+export const loginUser = async ( {  password, identity }: ILoginForm): Promise<void> => {
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, { email, password,username });
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, { identity, password});
         console.log(response.data);
     } catch (error) {
         console.log(error);

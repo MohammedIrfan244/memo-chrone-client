@@ -5,7 +5,7 @@ import { ILoginForm } from '@/lib/type'
 
 
 function LoginForm() {
-    const [formData, setFormData] = React.useState<ILoginForm>({ username: '', password: '', email: '' })
+    const [formData, setFormData] = React.useState<ILoginForm>({ identity: '', password: '' })
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         loginUser(formData)
@@ -13,8 +13,7 @@ function LoginForm() {
     return (
         <div>
             <form onSubmit={handleLogin}>
-                <input type="text" onChange={(e) => setFormData({ ...formData, username: e.target.value })} placeholder='username' />
-                <input type="email" placeholder='email' onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                <input type="text" onChange={(e) => setFormData({ ...formData, identity: e.target.value })} placeholder='username or email' />
                 <input type="password" placeholder='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                 <button type='submit'>Login</button>
             </form>
