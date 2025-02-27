@@ -1,11 +1,10 @@
-import { Button } from '@/components/ui/button'
+import LoginForm from '@/components/auth/LoginForm'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      Login
-      <Button>Login</Button>
+      <LoginForm/>
     </div>
   )
 }
