@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ILoginForm } from "./type";
+import { ILoginForm } from "./types/login";
 
 export const loginUser = async ( {  password, identity }: ILoginForm): Promise<void> => {
     try {

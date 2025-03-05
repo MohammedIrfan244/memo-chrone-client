@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { loginUser } from '@/lib/api'
-import { ILoginForm } from '@/lib/type'
+import { ILoginForm } from '@/lib/types/login' 
 
 
 function LoginForm() {
