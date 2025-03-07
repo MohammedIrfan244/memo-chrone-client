@@ -6,7 +6,3 @@ body {
   @apply bg-background ;
   @apply text-foreground;
 }
-.register {
-  background-image: url("https://i.pinimg.com/736x/b3/cd/30/b3cd30a999119ed6776d49d3a1dbef84.jpg");
-  background-size: cover;
-}
