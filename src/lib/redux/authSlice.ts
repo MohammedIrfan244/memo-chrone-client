@@ -1,27 +1,27 @@
 import { createSlice , PayloadAction } from "@reduxjs/toolkit";
 
 
-interface IUser {
+interface IAuthUser {
     username: string;
     email: string;
 }
 
 interface IAuthState {
-    user: IUser | null;
+    authUser: IAuthUser | null;
 }
 
-const user = localStorage.getItem("user")
+const user = localStorage.getItem("authUser")
 
 const INITIAL_STATE : IAuthState = {
-    user: user ? JSON.parse(user) : null
+    authUser: user ? JSON.parse(user) : null
 }
 
 const authSlice = createSlice({
     name : "user",
     initialState: INITIAL_STATE,
     reducers : {
-        setUser : (state,action:PayloadAction<IUser>) => {state.user = action.payload},
-        removeUser : (state)=>{state.user = null}   
+        setUser : (state,action:PayloadAction<IAuthUser>) => {state.authUser = action.payload},
+        removeUser : (state)=>{state.authUser = null}   
     }
 })
 

@@ -1,11 +1,18 @@
+"use client"
 import React from 'react'
+import RegisterForm from '@/components/auth/RegisterForm'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/lib/redux/store'
+import { Home } from 'lucide-react'
 
-function page() {
+
+function Page() {
+  const { authUser }= useSelector((state:RootState) => state.authUser)
   return (
-    <div className='w-full h-[100vh]'>
-      
+    <div>
+    {authUser ? <Home/>:<RegisterForm/>}
     </div>
   )
 }
 
-export default page
+export default Page

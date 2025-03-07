@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import MainLayout from "@/components/MainLayout";
+import { Providers } from "@/lib/redux/providers";
 
 
 export const metadata: Metadata = {
@@ -16,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <MainLayout>
-        {children}
-        </MainLayout>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
