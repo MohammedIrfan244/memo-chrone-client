@@ -40,7 +40,7 @@ function LoginForm() {
                     required
                     type="text"
                     placeholder="Email or Username"
-                    className="w-3/4 p-2 text-sm bg-opacity-20 bg-white placeholder:text-white"
+                    className="w-3/4 p-2 text-sm bg-opacity-20 focus:outline-none bg-white placeholder:text-white"
                     value={loginForm.identity}
                     onChange={(e) => setLoginForm({ ...loginForm, identity: e.target.value })}
                 />
@@ -48,7 +48,7 @@ function LoginForm() {
                     required
                     type="password"
                     placeholder="Password"
-                    className="w-3/4 p-2 text-sm bg-opacity-20 bg-white placeholder:text-white"
+                    className="w-3/4 p-2 text-sm bg-opacity-20 focus:outline-none bg-white placeholder:text-white"
                     value={loginForm.password}
                     onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                 />

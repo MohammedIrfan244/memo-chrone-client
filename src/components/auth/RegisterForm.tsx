@@ -57,7 +57,7 @@ const RegisterForm = () => {
           type="text"
           name="username"
           placeholder="Username"
-          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white placeholder:text-white"
+          className="w-3/4 p-2 text-sm bg-opacity-20 focus:outline-none bg-white placeholder:text-white"
           value={formik.values.username}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -69,7 +69,7 @@ const RegisterForm = () => {
           type="email"
           name="email"
           placeholder="Email"
-          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white placeholder:text-white"
+          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white focus:outline-none placeholder:text-white"
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -81,7 +81,7 @@ const RegisterForm = () => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white placeholder:text-white"
+          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white focus:outline-none placeholder:text-white"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
