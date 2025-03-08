@@ -1,10 +1,10 @@
-import RegisterForm from '@/components/auth/RegisterForm'
+import LoginForm from '@/components/auth/LoginForm'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      <RegisterForm />
+      <LoginForm />
     </div>
   )
 }
