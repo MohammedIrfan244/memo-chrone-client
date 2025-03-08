@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/lib/redux/store";
 import { setUser } from "@/lib/redux/authSlice";
 import { logger } from "@/lib/utils/logger";
 import { useRouter } from "next/navigation";
+import { isBrowser } from "@/lib/utils/isBrowser";
 
 const image: string =
   "https://i.pinimg.com/736x/9a/b7/84/9ab784694cf576aa6c2446be8d17a15f.jpg";
@@ -50,7 +51,7 @@ const RegisterForm = () => {
         logger(confirmPassword)
         const data: IAuthResponse | string = await registerUser(userData);
         if (typeof data === "string") throw new Error(data);
-        localStorage.setItem("accessToken", data.accessToken);
+        if(isBrowser()) localStorage.setItem("accessToken", data.accessToken)
         dispatch(setUser(data.user))
         router.push("/")
       } catch (error) {

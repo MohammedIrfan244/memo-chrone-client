@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILoggedInUser } from "../types/login";
+import { isBrowser } from "../utils/isBrowser";
 
 interface IAuthState {
   authUser: ILoggedInUser | null;
 }
 
-const user = localStorage.getItem("user");
+const user = isBrowser() ? localStorage.getItem("user") : null;
 
 const INITIAL_STATE: IAuthState = {
   authUser: user ? JSON.parse(user) : null,
@@ -17,7 +18,7 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<ILoggedInUser>) => {
       state.authUser = action.payload;
-      localStorage.setItem("user", JSON.stringify(state.authUser));
+      if(isBrowser()) localStorage.setItem("user", JSON.stringify(action.payload));
     },
     removeUser: (state) => {
       state.authUser = null;

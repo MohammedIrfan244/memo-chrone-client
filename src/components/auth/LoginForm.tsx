@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useAppDispatch } from "@/lib/redux/store";
 import { setUser } from "@/lib/redux/authSlice";
 import { useRouter } from "next/navigation";
+import { isBrowser } from "@/lib/utils/isBrowser";
 
 const image: string =
     "https://i.pinimg.com/736x/9a/b7/84/9ab784694cf576aa6c2446be8d17a15f.jpg";
@@ -19,28 +20,26 @@ function LoginForm() {
     });
     const [error, setError] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        loginUser(loginForm)
-            .then((data: string | IAuthResponse) => {
-                if (typeof data === "string") {
-                    setError(data);
-                } else {
-                    setError(data.message);
-                    localStorage.setItem("accessToken", data.accessToken);
-                    dispatch(setUser(data.user))
-                    router.push("/")
-                }
-            })
-            .catch((error) => {
-                setError(error)
-            })
-            .finally(() => {
-                setLoginForm({ identity: "", password: "" })
-            })
+        try {
+            const data: string | IAuthResponse = await loginUser(loginForm);
+            if (typeof data === "string") {
+                setError(data);
+            } else {
+                setError(data.message);
+                if(isBrowser()) localStorage.setItem("accessToken", data.accessToken);
+                dispatch(setUser(data.user));
+                router.push("/");
+            }
+        } catch (error) {
+            setError(error instanceof Error ? error.message : String(error));
+        } finally {
+            setLoginForm({ identity: "", password: "" });
+        }
     };
 
     const togglePasswordVisibility = () => {
