@@ -4,17 +4,22 @@ import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "@/lib/api";
+import { Eye, EyeOff } from "lucide-react";
 
 const image: string =
   "https://i.pinimg.com/736x/9a/b7/84/9ab784694cf576aa6c2446be8d17a15f.jpg";
 
 const RegisterForm = () => {
-  const [error,setError]=useState<string>("")
+  const [error, setError] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
   const formik = useFormik({
     initialValues: {
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -28,20 +33,31 @@ const RegisterForm = () => {
       password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required("Please confirm your password"),
     }),
-    onSubmit: (values) => {
-      registerUser(values)
-      .then((message) => {
+    onSubmit: async (values) => {
+      try {
+        const { confirmPassword, ...userData } = values;
+        console.log(confirmPassword)
+        const message = await registerUser(userData);
         setError(message);
-      })
-      .catch((error) => {
-        setError(error);
-      })
-      .finally(() => {
+      } catch (error) {
+        setError(error instanceof Error ? error.message : String(error));
+      } finally {
         formik.resetForm();
-        });
+      }
     },
   });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   return (
     <div
@@ -77,17 +93,47 @@ const RegisterForm = () => {
         {formik.touched.email && formik.errors.email && (
           <p className="text-red-500 text-xs w-3/4">{formik.errors.email}</p>
         )}
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-3/4 p-2 text-sm bg-opacity-20 bg-white focus:outline-none placeholder:text-white"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
+        <div className="relative w-3/4">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            className="w-full p-2 text-sm bg-opacity-20 bg-white focus:outline-none placeholder:text-white"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <button 
+            type="button" 
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
         {formik.touched.password && formik.errors.password && (
           <p className="text-red-500 text-xs w-3/4">{formik.errors.password}</p>
+        )}
+        <div className="relative w-3/4">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="w-full p-2 text-sm bg-opacity-20 bg-white focus:outline-none placeholder:text-white"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <button 
+            type="button" 
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
+            onClick={toggleConfirmPasswordVisibility}
+          >
+            {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+          <p className="text-red-500 text-xs w-3/4">{formik.errors.confirmPassword}</p>
         )}
         <button
           type="submit"

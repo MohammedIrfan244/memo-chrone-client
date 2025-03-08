@@ -1,7 +1,6 @@
 import axios from "axios"
-import { ILoginForm, IRegsiterForm } from "./types/login";
+import { IAuthResponse , ILoginForm, IRegsiterForm } from "./types/login";
 import handleAxiosError from "./utils/handleAxiosError";
-
 
 
 // auth
@@ -15,10 +14,10 @@ export const registerUser = async ({username , email, password}: IRegsiterForm):
     }
 }
 
-export const loginUser = async ( {  password, identity }: ILoginForm): Promise<string> => {
+export const loginUser = async ( {  password, identity }: ILoginForm): Promise< IAuthResponse | string> => {
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, { identity, password});
-        return response.data.message
+        const {data}:{data: IAuthResponse} = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, { identity, password});
+        return data
     } catch (error) {
         return handleAxiosError(error)
     }
