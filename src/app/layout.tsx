@@ -5,7 +5,10 @@ import { Providers } from "@/lib/redux/providers";
 
 export const metadata: Metadata = {
   title: "Memo Chrone",
-  description: "Save your memories with Memo Chrone",
+  description: "Save your moments with Memo Chrone",
+  icons: {
+    icon: "/favicon.ico",
+  }
 };
 
 export default function RootLayout({
