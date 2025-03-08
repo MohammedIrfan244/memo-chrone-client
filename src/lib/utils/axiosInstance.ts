@@ -1,5 +1,6 @@
 import axios from "axios";
 import handleAxiosError from "./handleAxiosError";
+import { logger } from "./logger";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -28,7 +29,7 @@ axiosInstance.interceptors.request.use(
         ] = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (error) {
-        console.log(handleAxiosError(error));
+        logger(handleAxiosError(error));
         const existingRefreshToken = localStorage.getItem("refreshToken");
         if (existingRefreshToken) {
           await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/logout`, {
@@ -40,7 +41,7 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
       }
     }
-    console.log(handleAxiosError(error));
+    logger(handleAxiosError(error));
     return Promise.reject(error);
   }
 );

@@ -5,6 +5,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerUser } from "@/lib/api";
 import { Eye, EyeOff } from "lucide-react";
+import { IAuthResponse } from "@/lib/types/login";
+import { useAppDispatch } from "@/lib/redux/store";
+import { setUser } from "@/lib/redux/authSlice";
+import { logger } from "@/lib/utils/logger";
+import { useRouter } from "next/navigation";
 
 const image: string =
   "https://i.pinimg.com/736x/9a/b7/84/9ab784694cf576aa6c2446be8d17a15f.jpg";
@@ -13,6 +18,8 @@ const RegisterForm = () => {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: {
@@ -40,9 +47,12 @@ const RegisterForm = () => {
     onSubmit: async (values) => {
       try {
         const { confirmPassword, ...userData } = values;
-        console.log(confirmPassword)
-        const message = await registerUser(userData);
-        setError(message);
+        logger(confirmPassword)
+        const data: IAuthResponse | string = await registerUser(userData);
+        if (typeof data === "string") throw new Error(data);
+        localStorage.setItem("accessToken", data.accessToken);
+        dispatch(setUser(data.user))
+        router.push("/")
       } catch (error) {
         setError(error instanceof Error ? error.message : String(error));
       } finally {
@@ -103,8 +113,8 @@ const RegisterForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
             onClick={togglePasswordVisibility}
           >
@@ -124,8 +134,8 @@ const RegisterForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
             onClick={toggleConfirmPasswordVisibility}
           >

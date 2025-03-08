@@ -4,6 +4,9 @@ import Link from "next/link";
 import { IAuthResponse, ILoginForm } from "@/lib/types/login";
 import { loginUser } from "@/lib/api";
 import { Eye, EyeOff } from "lucide-react";
+import { useAppDispatch } from "@/lib/redux/store";
+import { setUser } from "@/lib/redux/authSlice";
+import { useRouter } from "next/navigation";
 
 const image: string =
     "https://i.pinimg.com/736x/9a/b7/84/9ab784694cf576aa6c2446be8d17a15f.jpg";
@@ -16,25 +19,28 @@ function LoginForm() {
     });
     const [error, setError] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const dispatch = useAppDispatch()
+    const router = useRouter();
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         loginUser(loginForm)
-        .then((data : string | IAuthResponse) => {
-            if (typeof data === "string") {
-                setError(data);
-            } else {
-                setError(data.message);
-                localStorage.setItem("accessToken", data.accessToken);
-                localStorage.setItem("user", JSON.stringify(data.user));
-            }
-        })
-        .catch((error)=>{
-            setError(error)
-        })
-        .finally(()=>{
-            setLoginForm({identity:"",password:""})
-        })
+            .then((data: string | IAuthResponse) => {
+                if (typeof data === "string") {
+                    setError(data);
+                } else {
+                    setError(data.message);
+                    localStorage.setItem("accessToken", data.accessToken);
+                    dispatch(setUser(data.user))
+                    router.push("/")
+                }
+            })
+            .catch((error) => {
+                setError(error)
+            })
+            .finally(() => {
+                setLoginForm({ identity: "", password: "" })
+            })
     };
 
     const togglePasswordVisibility = () => {
@@ -65,8 +71,8 @@ function LoginForm() {
                         value={loginForm.password}
                         onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                     />
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
                         onClick={togglePasswordVisibility}
                     >
